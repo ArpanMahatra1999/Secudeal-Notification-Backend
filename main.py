@@ -1,11 +1,15 @@
+import os
+import json
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, messaging
 
 app = Flask(__name__)
 
-# Initialize Firebase Admin
-cred = credentials.Certificate("serviceAccountKey.json")
+# Load the service account JSON from environment variable
+service_account_info = json.loads(os.environ.get("SERVICE_ACCOUNT_KEY"))
+cred = credentials.Certificate(service_account_info)
+
 firebase_admin.initialize_app(cred)
 
 @app.route("/send-notification", methods=["POST"])
